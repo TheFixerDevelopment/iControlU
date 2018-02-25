@@ -31,7 +31,7 @@ class iControlU extends PluginBase implements CommandExecutor, Listener{
         $this->getServer()->getScheduler()->scheduleRepeatingTask($this->inv, 5);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
     }
-    public function onCommand(CommandSender $sender, Command $cmd, $label, array $args): bool{
+    public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args): bool{
         if($sender instanceof Player){
             if(isset($args[0])){
                 switch($args[0]){
@@ -41,11 +41,11 @@ class iControlU extends PluginBase implements CommandExecutor, Listener{
                             $this->s[$sender->getName()]->stopControl();
                             unset($this->b[$this->s[$sender->getName()]->getTarget()->getName()]);
                             unset($this->s[$sender->getName()]);
-                            $sender->sendMessage("Control stopped. You have invisibility for 10 seconds.");
+                            $sender->sendMessage("§aControl stopped. You have invisibility for 10 seconds.");
                             return true;
                         }
                         else{
-                            $sender->sendMessage("You are not controlling anyone.");
+                            $sender->sendMessage("§2You are not controlling anyone.");
                         }
                         break;
                     case 'control':
@@ -54,30 +54,30 @@ class iControlU extends PluginBase implements CommandExecutor, Listener{
                             if(($p = $this->getServer()->getPlayer($args[1])) instanceof Player){
                                 if($p->isOnline()){
                                     if(isset($this->s[$p->getName()]) || isset($this->b[$p->getName()])){
-                                        $sender->sendMessage("You are already bound to a control session.");
+                                        $sender->sendMessage("§bYou are already bound to a control session.");
                                         return true;
                                     }
                                     else{
                                         if($p->hasPermission("icu.exempt") || $p->getName() === $sender->getName()){
-                                            $sender->sendMessage("You can't control this player.");
+                                            $sender->sendMessage("&2You can't control this player.");
                                             return true;
 
                                         }
                                         else{
                                             $this->s[$sender->getName()] = new ControlSession($sender, $p, $this);
                                             $this->b[$p->getName()] = true;
-                                            $sender->sendMessage("You are now controlling " . $p->getName());
+                                            $sender->sendMessage("§aYou are now controlling§b " . $p->getName());
                                             return true;
                                         }
                                     }
                                 }
                                 else{
-                                    $sender->sendMessage("Player not online.");
+                                    $sender->sendMessage("§2Player not online.");
                                     return true;
                                 }
                             }
                             else{
-                                $sender->sendMessage("Player not found.");
+                                $sender->sendMessage("§2Player not found.");
                                 return true;
                             }
                         }
@@ -89,7 +89,7 @@ class iControlU extends PluginBase implements CommandExecutor, Listener{
             }
         }
         else{
-            $sender->sendMessage("Please run command in game.");
+            $sender->sendMessage("§2Please run command in game.");
             return true;
         }
     }
@@ -140,7 +140,7 @@ class iControlU extends PluginBase implements CommandExecutor, Listener{
         elseif($this->isBarred($event->getPlayer())){
             foreach($this->s as $i){
                 if($i->getTarget()->getName() == $event->getPlayer()->getName()){
-                    $i->getControl()->sendMessage($event->getPlayer()->getName() . " has left the game. Your session has been closed.");
+                    $i->getControl()->sendMessage($event->getPlayer()->getName() . " §chas left the game. Your session has been closed.");
                     foreach($this->getServer()->getOnlinePlayers() as $online){
                         $online->showPlayer($i->getControl());
                     }
