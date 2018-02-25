@@ -4,7 +4,7 @@ namespace icontrolu;
 use pocketmine\scheduler\PluginTask;
 
 class InventoryUpdateTask extends PluginTask{
-    public function onRun($tick){
+    public function onRun(int $tick){
         /** @var iControlU $owner */
         $owner = $this->getOwner();
         foreach($owner->s as $session){
